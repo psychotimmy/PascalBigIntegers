@@ -34,7 +34,7 @@ begin
   zapzeros := copy(num,i,len+1-i)
 end;
 
-{ Nines complement }
+{ Nines' complement }
 function nines(num: BigInt): BigInt;
 var i: Integer;
     out: BigInt;
@@ -289,7 +289,7 @@ begin
         num2 := nines(num2);
         temp2 := add(num1,num2);
         temp2 := add('1',temp2);
-        for i := 1 to length(temp2) do
+        for i := 1 to length(num2) do
           insert('0',temp1,1);
         insert('1',temp1,1);
         temp1 := nines(temp1);
