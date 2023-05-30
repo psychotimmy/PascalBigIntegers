@@ -52,8 +52,8 @@ run out of space.
 
 ## Test programs
 
-**Bigtest.pas** - a harness to check the correctness of each library function
+**BigTest.pas** - a harness to check the correctness of each library function
 
-**Bigprime.pas** - a sieve of Eratosthenes prime number generator
+**BigPrime.pas** - a sieve of Eratosthenes prime number generator
 
 
