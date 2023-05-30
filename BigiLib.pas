@@ -375,7 +375,7 @@ begin
       end { carry loop }
     end; { i loop }
     out := zapzeros(out,lenmax);
-    if neg=TRUE then
+    if (neg=TRUE) and (ne(out,'0')) then
       insert('-',out,1)
   end;
   add := out
@@ -432,7 +432,7 @@ begin
       end {j loop - num2}
     end; {i loop - num1}
     out := zapzeros(out,len1+len2);
-    if neg=TRUE then
+    if (neg=TRUE) and (ne(out,'0')) then
       insert('-',out,1);
     multiply := out
   end
