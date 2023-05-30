@@ -372,11 +372,11 @@ begin
         carry := currnum div 10;
         out[ci] := chr((currnum mod 10)+ORD0);
         ci := ci -1
-      end; { carry loop }
+      end { carry loop }
     end; { i loop }
     out := zapzeros(out,lenmax);
     if neg=TRUE then
-      insert('-',out,1);
+      insert('-',out,1)
   end;
   add := out
 end;
