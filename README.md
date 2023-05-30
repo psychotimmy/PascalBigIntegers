@@ -20,7 +20,7 @@ unary minus in front of a BigInt means that only MAXLEN-1 digits are available.
 
 **divide(BigInt1, BigInt2)** - Integer division of BigInt1 by BigInt2
 
-**modulo(BigInt1, BigInt2)** - Modulo of BigInt1 when divided by BigInt2
+**modulo(BigInt1, BigInt2)** - BigInt1 modulo BigInt2
 
 **isqrt(BigInt)** - Integer sqaure root of BigInt
 
