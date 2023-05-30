@@ -34,7 +34,7 @@ unary minus in front of a BigInt means that only MAXLEN-1 digits are available.
 
 **gt(BigInt1, BigInt2)** - True if BigInt1 is greater than BigInt2
 
-**ge(BigInt1, BigInt2)** - True is BigInt1 is greater than or equal to BigInt2
+**ge(BigInt1, BigInt2)** - True if BigInt1 is greater than or equal to BigInt2
 
 ## Usage
 
