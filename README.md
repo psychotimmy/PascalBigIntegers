@@ -30,7 +30,7 @@ unary minus in front of a BigInt means that only MAXLEN-1 digits are available.
 
 **lt(BigInt1, BigInt2)** - True if BigInt1 is less than BigInt2
 
-**le(BigInt1, BigInt2)** - True is BigInt1 is less than or equal to BigInt2
+**le(BigInt1, BigInt2)** - True if BigInt1 is less than or equal to BigInt2
 
 **gt(BigInt1, BigInt2)** - True if BigInt1 is greater than BigInt2
 
