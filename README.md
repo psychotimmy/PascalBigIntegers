@@ -4,7 +4,7 @@
 Big Integers are a user defined type (BigInt) based on Turbo Pascal Strings.
 
 You can set the maximum length of a BigInt by altering the MAXLEN
-constant in the library (Bigilib.pas). This must not exceed the maximum
+constant in the library (BigiLib.pas). This must not exceed the maximum
 allowed string length of 255.
 
 The library supports the use of positive and negative integers. Using a
@@ -38,7 +38,7 @@ unary minus in front of a BigInt means that only MAXLEN-1 digits are available.
 
 ## Usage
 
-The library file is **Bigilib.pas** 
+The library file is **BigiLib.pas** 
 
 To use it, your program must include it after the declaration, e.g.
 
