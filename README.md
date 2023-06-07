@@ -56,4 +56,13 @@ run out of space.
 
 **BigPrime.pas** - a sieve of Eratosthenes prime number generator
 
+## Bugs and Improvements
 
+The library does no checking on the validity of BigInts used as function arguments. The
+assumption made is that all digits of a BigInt are in the set [0..9] except for the 
+first position in the string, whcih may also be a '-'. Any BigInts that do not conform
+to this pattern may give rather strange results.
+
+The algorithms used are naive - for example, multiplication is an O(n^2) algorithm as it is 
+based on a manual pencil and paper method. Better algorithms, such as Karatsuba-Comba, should
+improve the efficiency of the library if implemented.
