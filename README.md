@@ -58,8 +58,11 @@ run out of space.
 
 ## Bugs and Improvements
 
-The library does no checking on the validity of BigInts used as function arguments. The
-assumption made is that all digits of a BigInt are in the set [0..9] except for the 
+The library does no checking on the validity of BigInts used as function arguments. An
+earlier version included an internal fucntion to do this, but doubled the time taken for
+the prime numbers between 1 and 100 to be calcuated, so was removed. 
+
+The assumption now made is that all digits of a BigInt are in the set [0..9] except for the 
 first position in the string, which may also be a '-'. Any BigInt arguments that do not conform
 to this pattern may give unpredictable results.
 
