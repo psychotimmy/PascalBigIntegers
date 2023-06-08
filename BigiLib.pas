@@ -250,8 +250,6 @@ var i: Integer;
     out, temp1, temp2: BigInt;
 begin
   out := '';
-  temp1 := '';
-  temp2 := '';
   if (num1[1]<>'-') and (num2[1]='-') and (out='') then
   begin
     delete(num2,1,1);
@@ -286,6 +284,8 @@ begin
     begin
       if gt(num2,num1) then
       begin
+        temp1 := '';
+        temp2 := '';
         num2 := nines(num2);
         temp2 := add(num1,num2);
         temp2 := add('1',temp2);
