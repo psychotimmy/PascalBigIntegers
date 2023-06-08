@@ -50,6 +50,9 @@ As the library is large by CP/M standards it is recommended that the option to p
 output is selected in the compiler, otherwise it is likely any non-trivial program will 
 run out of space.
 
+To use the library and test programs unaltered under Free Pascal 3.0.4 (for example, on
+a Raspberry Pi), use the -Mtp compiler flag - for example, **fpc -Mtp BigPrime.pas** 
+
 ## Test programs
 
 **BigTest.pas** - a harness to check the correctness of each library function
