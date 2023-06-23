@@ -3,7 +3,7 @@
 
 Big Integers are a user defined type (BigInt) based on Turbo Pascal Strings.
 
-You can set the maximum length of a BigInt by altering the MAXLEN
+The maximum length of a BigInt is set by altering the MAXLEN
 constant in the library (BigiLib.pas). This must not exceed the maximum
 allowed string length of 255.
 
@@ -64,12 +64,12 @@ For example, **fpc -Mtp BigPrime.pas**
 ## Bugs and Improvements
 
 The library does no checking on the validity of BigInts used as function arguments. An
-earlier version included an internal fucntion to do this, but doubled the time taken for
+earlier version included an internal function to do this, but doubled the time taken for
 the prime numbers between 1 and 100 to be calcuated, so was removed. 
 
 The assumption now made is that all digits of a BigInt are in the set [0..9] except for the 
 first position in the string, which may also be a '-'. Any BigInt arguments that do not conform
-to this pattern may give unpredictable results.
+to this pattern will give unpredictable results.
 
 The algorithms used are naive - for example, multiplication is an O(n^2) algorithm as it is 
 based on a manual pencil and paper method. Better algorithms, such as Karatsuba-Comba, should
