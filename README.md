@@ -5,7 +5,16 @@ Big Integers are a user defined type (BigInt) based on Turbo Pascal Strings.
 
 The maximum length of a BigInt is set by altering the MAXLEN
 constant in the library (BigiLib.pas). This must not exceed the maximum
-allowed string length of 255.
+allowed string length of 255. This is currently set to 50 in version 2.
+
+Significant performance improvements made over version 1:
+
+  - Karatsuba multiplication algorithm implemented
+  - eq and ne functions simplified as they are just string comparisons
+  - add/sub/fastdiv/karatsuba functions check to see if standard integers can be
+    used for calculations instead of always using the big integer algorithms
+  - Inlined all internal functions (e.g zapzeros, nines complement) to improve speed
+    at the cost of slight downgrades of code readability and maintainability
 
 The library supports the use of positive and negative integers. Using a
 unary minus in front of a BigInt means that only MAXLEN-1 digits are available.
@@ -70,7 +79,3 @@ the prime numbers between 1 and 100 to be calcuated, so was removed.
 The assumption now made is that all digits of a BigInt are in the set [0..9] except for the 
 first position in the string, which may also be a '-'. Any BigInt arguments that do not conform
 to this pattern will give unpredictable results.
-
-The algorithms used are naive - for example, multiplication is an O(n^2) algorithm as it is 
-based on a manual pencil and paper method. Better algorithms, such as Karatsuba-Comba, should
-improve the efficiency of the library if implemented.
