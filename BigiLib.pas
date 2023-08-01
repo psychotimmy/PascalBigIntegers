@@ -336,7 +336,7 @@ begin
   else
   begin
     out := '';
-    if (num1[1]<>'-') and (num2[1]='-') and (out='') then
+    if (num1[1]<>'-') and (num2[1]='-') then
     begin
       delete(num2,1,1);
       out := add(num1,num2)
@@ -349,11 +349,10 @@ begin
     end;
     if (num1[1]='-') and (num2[1]='-') and (out='') then
     begin
-      out := num1;
+      temp1 := num1;
       num2 := num1;
-      num1 := num2;
-      delete(num1,1,1);
-      out := ''
+      num1 := temp1;
+      delete(num1,1,1)
     end;
     if (out = '') then
     begin
