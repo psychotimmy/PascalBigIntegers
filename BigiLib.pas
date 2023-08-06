@@ -190,7 +190,7 @@ end;
 
 { Greater than }
 function gt(num1: BigInt; num2: BigInt): Boolean;
-var len1, len2, i: Integer;
+var len1, len2: Integer;
     temp: Bigint;
 begin
   if ((num1[1]='-') and (num2[1]<>'-')) then
@@ -211,12 +211,11 @@ begin
     len1 := length(num1);
     len2 := length(num2);
     if (len1 > len2) then
-      for i := 1 to len1-len2 do
-        insert('0',num2,1);
+      gt := TRUE;
     if (len2 > len1) then
-      for i := 1 to len2-len1 do
-        insert('0',num1,1);
-    gt := num1 > num2
+      gt := FALSE;
+    if (len1 = len2) then
+      gt := num1 > num2
   end
 end;
 
@@ -228,7 +227,7 @@ end;
 
 { Less than - forward referenced }
 function lt;
-var len1, len2, i: Integer;
+var len1, len2: Integer;
     temp: Bigint;
 begin
   if ((num1[1]<>'-') and (num2[1]='-')) then
@@ -249,12 +248,11 @@ begin
     len1 := length(num1);
     len2 := length(num2);
     if (len1 > len2) then
-      for i := 1 to len1-len2 do
-        insert('0',num2,1);
+      lt := FALSE;
     if (len2 > len1) then
-      for i := 1 to len2-len1 do
-        insert('0',num1,1);
-    lt := num1 < num2
+      lt := TRUE;
+    if (len1 = len2) then
+      lt := num1 < num2
   end
 end;
 
