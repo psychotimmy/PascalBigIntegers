@@ -575,24 +575,28 @@ end;
 
 { Square root }
 function isqrt(num: BigInt): BigInt;
-var t0, t1: BigInt;
+var x, y: BigInt;
+var i, j: Integer;
 begin
   if (num[1]='-') then
-    t0 := 'NaN'
+    x := 'NaN'
+  else
+  if (length(num) <= SAFELEN+1) and (num <= '32767') then
+  begin
+    val(num,i,j);
+    j := trunc(sqrt(i));
+    str(j,x)
+  end
   else
   begin
-    t0 := divide(num,'2');
-    t1 := divide(num,t0);
-    t1 := add(t0,t1);
-    t1 := divide(t1,'2');
-
-    while lt(t1,t0) do
+    x := num;
+    y := '1';
+    while gt(x,y) do
     begin
-      t0 := t1;
-      t1 := divide(num,t0);
-      t1 := add(t0,t1);
-      t1 := divide(t1,'2');
+      x := add(x,y);
+      x := divide(x,'2');
+      y := divide(num,x)
     end { while }
   end;
-  isqrt := t0
+  isqrt := x
 end;
