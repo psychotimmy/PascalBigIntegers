@@ -211,10 +211,11 @@ begin
     len1 := length(num1);
     len2 := length(num2);
     if (len1 > len2) then
-      gt := TRUE;
+      gt := TRUE
+    else
     if (len2 > len1) then
-      gt := FALSE;
-    if (len1 = len2) then
+      gt := FALSE
+    else
       gt := num1 > num2
   end
 end;
@@ -248,10 +249,11 @@ begin
     len1 := length(num1);
     len2 := length(num2);
     if (len1 > len2) then
-      lt := FALSE;
+      lt := FALSE
+    else
     if (len2 > len1) then
-      lt := TRUE;
-    if (len1 = len2) then
+      lt := TRUE
+    else
       lt := num1 < num2
   end
 end;
