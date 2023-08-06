@@ -1,6 +1,6 @@
-{ Big integer library v2   }
-{ Turbo Pascal 3.01A, CP/M }
-{ Tim Holyoake, July 2023  }
+{ Big integer library v2     }
+{ Turbo Pascal 3.01A, CP/M   }
+{ Tim Holyoake, August 2023  }
 
 { Turbo Pascal CP/M compiler directives to allow recursive calls }
 { and turn off argument bounds checking to function calls        }
@@ -14,7 +14,7 @@ type BigInt = string[MAXLEN];
 const ORD0 = 48;                { ord('0') }
 const ORD0PLUSORD9 = 105;       { ord('0') + ord('9') }
 const FULLMAX = '32766';        { MAXINT-1 as a BigInt }
-const HALFMAX = '16383';	{ Half of MAXINT-1 as a BigInt }
+const HALFMAX = '16383';        { Half of MAXINT-1 as a BigInt }
 const SAFELEN = 4;              { length(MAXINT) - 1 }
 
 { Forward references - note TP requires the actual function NOT to }
@@ -129,7 +129,7 @@ begin
     str(i,part1);
     karatsuba := part1
   end
-  else 
+  else
   begin
     if hx > hy then
       for i := 1 to hx-hy do
@@ -142,7 +142,7 @@ begin
     begin
       insert('0',x,1);
       insert('0',y,1)
-    end;  
+    end;
 
     pos := length(x);
     hx := pos div 2;
@@ -191,62 +191,33 @@ end;
 { Greater than }
 function gt(num1: BigInt; num2: BigInt): Boolean;
 var len1, len2, i: Integer;
-    tgt: Boolean;
     temp: Bigint;
-    found: Boolean;
 begin
-  if (length(num1) <= SAFELEN) and (length(num2) <= SAFELEN) then
-  begin
-    val(num1,len1,i);
-    val(num2,len2,i);
-    tgt := len1 > len2
-  end
+  if ((num1[1]='-') and (num2[1]<>'-')) then
+    gt := FALSE
+  else
+  if ((num1[1]<>'-') and (num2[1]='-')) then
+    gt := TRUE
   else
   begin
+    if (num1[1]='-') and (num2[1]='-') then
+    begin
+      delete(num1,1,1);
+      delete(num2,1,1);
+      temp := num1;
+      num1 := num2;
+      num2 := temp
+    end;
     len1 := length(num1);
     len2 := length(num2);
-    begin
-      if ((num1[len1]='-') and (num2[len2]<>'-')) then
-        tgt := FALSE
-      else
-      if ((num1[len1]<>'-') and (num2[len2]='-')) then
-        tgt := TRUE
-      else
-      begin
-        if (num1[len1]='-') and (num2[len2]='-') then
-        begin
-          delete(num1,1,1);
-          delete(num2,1,1);
-          temp := num1;
-          num1 := num2;
-          num2 := temp;
-          len1 := len2-1;
-          len2 := len1-1
-        end;
-        if (len1 > len2) then
-          for i := 1 to len1-len2 do
-            insert('0',num2,1);
-        if (len2 > len1) then
-          for i := 1 to len2-len1 do
-            insert('0',num1,1);
-        tgt := FALSE;
-        found := FALSE;
-        i := 1;
-        while (i <= length(num1)) and (found = FALSE) do
-        begin
-          if (num1[i]>num2[i]) then
-          begin
-            found := TRUE;
-            tgt := TRUE
-          end;
-          if (num1[i]<num2[i]) then
-            found := TRUE;
-          i := i+1
-        end
-      end
-    end
-  end;
-  gt := tgt
+    if (len1 > len2) then
+      for i := 1 to len1-len2 do
+        insert('0',num2,1);
+    if (len2 > len1) then
+      for i := 1 to len2-len1 do
+        insert('0',num1,1);
+    gt := num1 > num2
+  end
 end;
 
 { Greater than or equal to }
@@ -258,61 +229,33 @@ end;
 { Less than - forward referenced }
 function lt;
 var len1, len2, i: Integer;
-    temp: BigInt;
-    found, tlt: Boolean;
+    temp: Bigint;
 begin
-  if (length(num1) <= SAFELEN) and (length(num2) <= SAFELEN) then
-  begin
-    val(num1,len1,i);
-    val(num2,len2,i);
-    tlt := len1 < len2
-  end
+  if ((num1[1]<>'-') and (num2[1]='-')) then
+    lt := FALSE
+  else
+  if ((num1[1]='-') and (num2[1]<>'-')) then
+    lt := TRUE
   else
   begin
+    if (num1[1]='-') and (num2[1]='-') then
+    begin
+      delete(num1,1,1);
+      delete(num2,1,1);
+      temp := num1;
+      num1 := num2;
+      num2 := temp
+    end;
     len1 := length(num1);
     len2 := length(num2);
-    begin
-      if ((num1[len1]='-') and (num2[len2]<>'-')) then
-        tlt := TRUE
-      else
-      if ((num1[len1]<>'-') and (num2[len2]='-')) then
-        tlt := FALSE
-      else
-      begin
-        if (num1[len1]='-') and (num2[len2]='-') then
-        begin
-          delete(num1,1,1);
-          delete(num2,1,1);
-          temp := num1;
-          num1 := num2;
-          num2 := temp;
-          len1 := len2 - 1;
-          len2 := len1 - 1
-        end;
-        if (len1 > len2) then
-          for i := 1 to len1-len2 do
-            insert('0',num2,1);
-        if (len2 > len1) then
-          for i := 1 to len2-len1 do
-            insert('0',num1,1);
-        tlt := FALSE;
-        found := FALSE;
-        i := 1;
-        while (i <= length(num1)) and (found = FALSE) do
-        begin
-          if (num1[i]<num2[i]) then
-          begin
-            found := TRUE;
-            tlt := TRUE
-          end;
-          if (num1[i]>num2[i]) then
-            found := TRUE;
-          i := i+1
-        end
-      end
-    end
-  end;
-  lt := tlt
+    if (len1 > len2) then
+      for i := 1 to len1-len2 do
+        insert('0',num2,1);
+    if (len2 > len1) then
+      for i := 1 to len2-len1 do
+        insert('0',num1,1);
+    lt := num1 < num2
+  end
 end;
 
 { Less than or equal to }
@@ -332,7 +275,7 @@ begin
     val(num2,t2i,i);
     i := t1i-t2i;
     str(i,out)
-  end 
+  end
   else
   begin
     out := '';
@@ -434,7 +377,7 @@ begin
     val(num2,len2,i);
     i := len1+len2;
     str(i,out)
-  end 
+  end
   else
   begin
     out := '';
