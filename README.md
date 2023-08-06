@@ -10,7 +10,7 @@ allowed string length of 255. This is currently set to 50 in version 2.
 Significant performance improvements made over version 1:
 
   - Karatsuba multiplication algorithm implemented
-  - eq and ne functions simplified as they are just string comparisons
+  - lt, gt, eq and ne functions simplified as they are mostly string comparisons
   - add/sub/fastdiv/karatsuba functions check to see if standard integers can be
     used for calculations instead of always using the big integer algorithms
   - Inlined all internal functions (e.g zapzeros, nines complement) to improve speed
