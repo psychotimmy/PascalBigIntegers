@@ -190,8 +190,6 @@ end;
 
 { Greater than }
 function gt(num1: BigInt; num2: BigInt): Boolean;
-var len1, len2: Integer;
-    temp: Bigint;
 begin
   if ((num1[1]='-') and (num2[1]<>'-')) then
     gt := FALSE
@@ -199,25 +197,20 @@ begin
   if ((num1[1]<>'-') and (num2[1]='-')) then
     gt := TRUE
   else
+  if (num1[1]='-') and (num2[1]='-') then
   begin
-    if (num1[1]='-') and (num2[1]='-') then
-    begin
-      delete(num1,1,1);
-      delete(num2,1,1);
-      temp := num1;
-      num1 := num2;
-      num2 := temp
-    end;
-    len1 := length(num1);
-    len2 := length(num2);
-    if (len1 > len2) then
-      gt := TRUE
+    delete(num1,1,1);
+    delete(num2,1,1);
+    if (length(num1) = length(num2)) then
+      gt := num2 > num1
     else
-    if (len2 > len1) then
-      gt := FALSE
-    else
-      gt := num1 > num2
+      gt := length(num2) > length(num1)
   end
+  else
+  if (length(num1) = length(num2)) then
+    gt := num1 > num2
+  else
+    gt := length(num1) > length(num2)
 end;
 
 { Greater than or equal to }
@@ -228,8 +221,6 @@ end;
 
 { Less than - forward referenced }
 function lt;
-var len1, len2: Integer;
-    temp: Bigint;
 begin
   if ((num1[1]<>'-') and (num2[1]='-')) then
     lt := FALSE
@@ -237,25 +228,20 @@ begin
   if ((num1[1]='-') and (num2[1]<>'-')) then
     lt := TRUE
   else
+  if (num1[1]='-') and (num2[1]='-') then
   begin
-    if (num1[1]='-') and (num2[1]='-') then
-    begin
-      delete(num1,1,1);
-      delete(num2,1,1);
-      temp := num1;
-      num1 := num2;
-      num2 := temp
-    end;
-    len1 := length(num1);
-    len2 := length(num2);
-    if (len1 > len2) then
-      lt := FALSE
+    delete(num1,1,1);
+    delete(num2,1,1);
+    if (length(num1) = length(num2)) then
+      lt := num2 < num1
     else
-    if (len2 > len1) then
-      lt := TRUE
-    else
-      lt := num1 < num2
+      lt := length(num2) < length(num1)
   end
+  else
+    if (length(num1) = length(num2)) then
+      lt := num1 < num2
+    else
+      lt := length(num1) < length(num2)
 end;
 
 { Less than or equal to }
