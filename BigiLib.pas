@@ -357,47 +357,53 @@ var len1, len2, lenmax, carry, ci, currnum, i, j: Integer;
 begin
   len1 := length(num1);
   len2 := length(num2);
+  if len1 > len2 then
+    lenmax := len1+1
+  else
+    lenmax := len2+1;
+  if (lenmax > MAXLEN) or (lenmax < 2) then
+    out := 'NaN'
+  else
   if (len1 <= SAFELEN) and (len2 <=SAFELEN) then { Safe for integer addition }
   begin
-    val(num1,len1,i);
-    val(num2,len2,i);
-    i := len1+len2;
+    val(num1,i,ci);
+    val(num2,j,ci);
+    i := i+j;
     str(i,out)
   end
   else
   begin
     out := '';
     neg := FALSE;
-    if len1 > len2 then
-      lenmax := len1+1
-    else
-      lenmax := len2+1;
-    if (lenmax>MAXLEN) then
-      out := 'NaN';
-    if (num1[1]='-') and (num2[1]<>'-') and (out='') then
+    { One number is negative - therefore subtraction }
+    if (num1[1]='-') and (num2[1]<>'-') then
     begin
       delete(num1,1,1);
       out := sub(num2,num1)
-    end;
-    if (num1[1]<>'-') and (num2[1]='-') and (out='') then
+    end
+    else
+    if (num1[1]<>'-') and (num2[1]='-') then
     begin
       delete(num2,1,1);
       out := sub(num1,num2)
     end;
+    { Both numbers negative - so add and invert sign }
     if (num1[1]='-') and (num2[1]='-') then
     begin
-      neg := TRUE;
       delete(num1,1,1);
       delete(num2,1,1);
-      len1 := length(num1);
-      len2 := length(num2);
+      len1 := len1-1;
+      len2 := len2-2;
       if (len1 = 0) or (len2 = 0) then
         out := 'NaN'
+      else
+        neg := TRUE;
     end;
+    { If out is still blank, then perform addition }
     if (out = '') then
     begin
       for i := 1 to lenmax do
-        insert('0',out,i);
+        insert('0',out,1);
       j := lenmax;
       for i := len1 downto 1 do
       begin
@@ -422,12 +428,14 @@ begin
         end { carry loop }
       end; { i loop }
       if (length(out) > 1) and (out[1]='0') then
+      { Zap all leading zeros }
       begin
         i := 1;
         while (out[i]='0') and (i < length(out)) do
           i :=  i + 1;
         out := copy(out,i,length(out)+1-i)
       end;
+      { Don't use a negative sign if result was 0 }
       if (neg) and (out<>'0') then
         insert('-',out,1)
     end
