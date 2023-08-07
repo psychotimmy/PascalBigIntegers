@@ -60,7 +60,7 @@ output is selected in the compiler, otherwise it is likely any non-trivial progr
 run out of space.
 
 To compile the library and test programs unaltered under Free Pascal 3.0.4 and 3.2 (for example, on
-a Raspberry Pi using Buster or Bullseye), use the -Mtp compiler flag.
+a Raspberry Pi using Buster or Bullseye), you **must** use the -Mtp compiler flag.
 
 For example, **fpc -Mtp BigPrime.pas** 
 
