@@ -470,24 +470,20 @@ end;
 
 { Division }
 function divide(num: BigInt; den: BigInt): BigInt;
-var len1, len2, i: Integer;
+var n, d, i: Integer;
     quotient, remainder: BigInt;
     neg: Boolean;
 begin
-  len1 := length(num);
-  len2 := length(den);
   neg := FALSE;
   if num[1]='-' then
   begin
     neg := TRUE;
-    delete(num,1,1);
-    len1 := len1-1
+    delete(num,1,1)
   end;
   if den[1]='-' then
   begin
     neg := not(neg);
-    delete(den,1,1);
-    len2 := len2-1
+    delete(den,1,1)
   end;
   if den='0' then
     divide := 'NaN'
@@ -495,9 +491,9 @@ begin
   begin
     if lt(num,FULLMAX) and lt(den,FULLMAX) then
     begin
-      val(num,len1,i);
-      val(den,len2,i);
-      i := len1 div len2;
+      val(num,n,i);
+      val(den,d,i);
+      i := n div d;
       str(i,quotient)
     end
     else
@@ -519,33 +515,27 @@ end;
 
 { Modulo  - implements the same definition as TP3.01A }
 function modulo(num: BigInt; den: BigInt): BigInt;
-var len1, len2, i: Integer;
+var n, d, i: Integer;
     quotient, remainder: BigInt;
     neg: Boolean;
 begin
-  len1 := length(num);
-  len2 := length(den);
   neg := FALSE;
   if num[1]='-' then
   begin
     neg := TRUE;
-    delete(num,1,1);
-    len1 := len1-1
+    delete(num,1,1)
   end;
   if den[1]='-' then
-  begin
     delete(den,1,1);
-    len2 := len2-1
-  end;
   if den='0' then
     modulo := 'NaN'
   else
   begin
     if lt(num,FULLMAX) and lt(den,FULLMAX) then
     begin
-      val(num,len1,i);
-      val(den,len2,i);
-      i := len1 mod len2;
+      val(num,n,i);
+      val(den,d,i);
+      i := n mod d;
       str(i,remainder)
     end
     else
