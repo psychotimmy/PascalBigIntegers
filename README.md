@@ -66,7 +66,7 @@ For example, **fpc -Mtp BigPrime.pas**
 
 ## Test programs
 
-**BigTest.pas** - a harness to check the correctness of each library function
+**BigTest.pas** - an incomplete harness to check the correctness of each library function
 
 **BigPrime.pas** - a sieve of Eratosthenes prime number generator
 
