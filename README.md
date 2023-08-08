@@ -11,10 +11,11 @@ Significant performance improvements made over version 1:
 
   - Modified karatsuba multiplication algorithm implemented
   - lt, gt, eq and ne functions simplified as they are mostly string comparisons
-  - add/sub/fastdiv/karatsuba functions check to see if standard integers can be
-    used for calculations instead of always using the big integer algorithms
+  - add/sub/fastdiv/karatsuba/multiply/divide/isqrt functions check to see if
+    standard integers can be used for calculations instead of always using
+    big integer algorithms
   - Inlined all internal functions (e.g zapzeros, nines complement) to improve speed
-    at the cost of slight downgrades of code readability and maintainability
+    at the cost of slight downgrades in code readability and maintainability
 
 The library supports the use of positive and negative integers. Using a
 unary minus in front of a BigInt means that only MAXLEN-1 digits are available.
