@@ -583,7 +583,7 @@ begin
   if (num[1]='-') then
     x := 'NaN'
   else
-  if (length(num) <= SAFELEN+1) and (num <= '32767') then
+  if (length(num) <= SAFELEN+1) and (num <= FULLMAX) then
   begin
     val(num,i,j);
     j := trunc(sqrt(i));
