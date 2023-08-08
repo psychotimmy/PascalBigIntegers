@@ -80,3 +80,7 @@ the prime numbers between 1 and 100 to be calcuated, so was removed.
 The assumption now made is that all digits of a BigInt are in the set [0..9] except for the 
 first position in the string, which may also be a '-'. Any BigInt arguments that do not conform
 to this pattern will give unpredictable results.
+
+While this library produces results at a reasonable speed on more modern hardware (such as a 2012 
+Raspberry Pi B) you will need great patience to wait for results on a Z80 running CP/M 2.2 - the 
+real target architecture! 
