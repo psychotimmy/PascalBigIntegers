@@ -70,7 +70,7 @@ begin
       for i := 1 to hy-hx do
         insert('0',x,1);
 
-    if (length(x) mod 2) <> 0 then
+    if odd(length(x)) then
     begin
       insert('0',x,1);
       insert('0',y,1)
