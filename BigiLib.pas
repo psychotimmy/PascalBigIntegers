@@ -27,77 +27,6 @@ function lt(num1: BigInt; num2: BigInt): Boolean; Forward;
 
 { *** Internal Library Functions and Procedures *** }
 
-{ Fast(er) divide procedure (than repeated subtraction) }
-var quott,remt: BigInt; { Used as var parameters so can't be declared  }
-                        { locally in fastdiv - see TP 3.0 reference manual }
-procedure fastdiv(num: BigInt; den: BigInt; var quot: BigInt; var rem: BigInt);
-var dent: BigInt;
-    quoti, remti, deni, i: Integer;
-begin
-  if lt(num,den) then
-  begin
-    quot := '0';
-    rem := num
-  end
-  else
-  begin
-    if lt(den,HALFMAX) then      { Can safely use Integer arithmetic }
-    begin
-      val(den,deni,i);
-      i := deni*2;
-      str(i,dent)
-    end
-    else
-      dent := multiply(den,'2');
-
-    fastdiv(num,dent,quott,remt);
-
-    if lt(remt,den) then
-    begin
-      if lt(quott,HALFMAX) then
-      begin
-        val(quott,quoti,i);
-        i := quoti*2;
-        str(i,quot)
-      end
-      else
-        quot := multiply(quott,'2');
-      rem := remt
-    end
-    else
-    begin
-      if lt(quott,HALFMAX) then
-      begin
-        val(quott,quoti,i);
-        i := quoti*2;
-        str(i,quot)
-      end
-      else
-        quot := multiply(quott,'2');
-
-      if lt(quot,FULLMAX) then
-      begin
-        val(quot,quoti,i);
-        i := quoti+1;
-        str(i,quot)
-      end
-      else
-        quot := add(quot, '1');
-
-      if (length(remt)<=SAFELEN) and (length(den)<=SAFELEN) then
-      begin
-        val(remt,remti,i);
-        val(den,deni,i);
-        i := remti-deni;
-        str(i,dent);
-        rem := dent
-      end
-      else
-        rem := sub(remt,den)
-    end
-  end
-end;
-
 { Karatsuba multiplication - recursive function }
 function karatsuba(x: BigInt; y: BigInt): BigInt;
 var i, hx, hy, pos: Integer;
@@ -105,6 +34,7 @@ var i, hx, hy, pos: Integer;
 begin
   hx := length(x);
   hy := length(y);
+
   { Zap any unwanted leading zeros - recursive entries may have them }
   if (hx > 1) and (x[1]='0') then
   begin
@@ -123,9 +53,11 @@ begin
     hy := length(y)
   end;
 
-  if (hx = 1) and (hy = 1) then { Single digits - return result }
-  begin
-    i := (ord(x[1])-ORD0)*(ord(y[1])-ORD0);
+  if (hx+hy) < SAFELEN then { Can safely multiply - return result }
+  begin                     { Standard karatsuba assumes only }
+    val(x,hx,i);            { single digits are safe }
+    val(y,hy,i);
+    i := hx*hy;
     str(i,part1);
     karatsuba := part1
   end
@@ -171,6 +103,77 @@ begin
     t3 := add(t1,t2);
 
     karatsuba := add(t3,part3)
+  end
+end;
+
+{ Fast(er) divide procedure (than repeated subtraction) }
+var quott,remt: BigInt; { Used as var parameters so can't be declared  }
+                        { locally in fastdiv - see TP 3.0 reference manual }
+procedure fastdiv(num: BigInt; den: BigInt; var quot: BigInt; var rem: BigInt);
+var dent: BigInt;
+    quoti, remti, deni, i: Integer;
+begin
+  if lt(num,den) then
+  begin
+    quot := '0';
+    rem := num
+  end
+  else
+  begin
+    if lt(den,HALFMAX) then      { Can safely use Integer arithmetic }
+    begin
+      val(den,deni,i);
+      i := deni*2;
+      str(i,dent)
+    end
+    else
+      dent := karatsuba(den,'2');
+
+    fastdiv(num,dent,quott,remt);
+
+    if lt(remt,den) then
+    begin
+      if lt(quott,HALFMAX) then
+      begin
+        val(quott,quoti,i);
+        i := quoti*2;
+        str(i,quot)
+      end
+      else
+        quot := karatsuba(quott,'2');
+      rem := remt
+    end
+    else
+    begin
+      if lt(quott,HALFMAX) then
+      begin
+        val(quott,quoti,i);
+        i := quoti*2;
+        str(i,quot)
+      end
+      else
+        quot := karatsuba(quott,'2');
+
+      if lt(quot,FULLMAX) then
+      begin
+        val(quot,quoti,i);
+        i := quoti+1;
+        str(i,quot)
+      end
+      else
+        quot := add(quot, '1');
+
+      if (length(remt)<=SAFELEN) and (length(den)<=SAFELEN) then
+      begin
+        val(remt,remti,i);
+        val(den,deni,i);
+        i := remti-deni;
+        str(i,dent);
+        rem := dent
+      end
+      else
+        rem := sub(remt,den)
+    end
   end
 end;
 
@@ -366,8 +369,8 @@ begin
   begin
     val(num1,i,ci);
     val(num2,j,ci);
-    i := i+j;
-    str(i,out)
+    ci := i+j;
+    str(ci,out)
   end
   else
   begin
@@ -444,27 +447,41 @@ end;
 { Multiplication - forward referenced }
 function multiply;
 var neg: Boolean;
+    x, y, i: Integer;
     out: BigInt;
 begin
-  neg := FALSE;
-  if (length(num1)+length(num2))>MAXLEN then
-    multiply := 'NaN'
+  x := length(num1);
+  y := length(num2);
+  if (x+y) <= SAFELEN then
+  begin
+    val(num1,x,i);
+    val(num2,y,i);
+    i := x+y;
+    str(i,out);
+    multiply := out
+  end
   else
   begin
-    if num1[1]='-' then
+    neg := FALSE;
+    if (x+y) > MAXLEN then
+      multiply := 'NaN'
+    else
     begin
-      neg := TRUE;
-      delete(num1,1,1)
-    end;
-    if num2[1]='-' then
-    begin
-      neg := not(neg);
-      delete(num2,1,1)
-    end;
-    out := karatsuba(num1,num2);
-    if (neg) and (out<>'0') then
-      insert('-',out,1);
-    multiply := out
+      if num1[1]='-' then
+      begin
+        neg := TRUE;
+        delete(num1,1,1)
+      end;
+      if num2[1]='-' then
+      begin
+        neg := not(neg);
+        delete(num2,1,1)
+      end;
+      out := karatsuba(num1,num2);
+      if (neg) and (out<>'0') then
+        insert('-',out,1);
+      multiply := out
+    end
   end
 end;
 
@@ -557,7 +574,7 @@ end;
 
 { Square root }
 function isqrt(num: BigInt): BigInt;
-var x, y: BigInt;
+var x, y:  BigInt;
 var i, j: Integer;
 begin
   if (num[1]='-') then
