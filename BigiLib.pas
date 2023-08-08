@@ -13,7 +13,8 @@ const MAXLEN = 50;              { Maximum length of a BigInt, including sign }
 type BigInt = string[MAXLEN];
 const ORD0 = 48;                { ord('0') }
 const ORD0PLUSORD9 = 105;       { ord('0') + ord('9') }
-const FULLMAX = '32766';        { MAXINT-1 as a BigInt }
+const FULLMAX = '32767';        { MAXINT as a BigInt }
+const NEARMAX = '32766';        { MAXINT-1 as a BigInt }
 const HALFMAX = '16383';        { Half of MAXINT-1 as a BigInt }
 const SAFELEN = 4;              { length(MAXINT) - 1 }
 
@@ -154,7 +155,7 @@ begin
       else
         quot := karatsuba(quott,'2');
 
-      if lt(quot,FULLMAX) then
+      if lt(quot,NEARMAX) then
       begin
         val(quot,quoti,i);
         i := quoti+1;
