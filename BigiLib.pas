@@ -163,7 +163,9 @@ begin
       else
         quot := add(quot, '1');
 
-      if (length(remt)<=SAFELEN) and (length(den)<=SAFELEN) then
+      if ((length(remt) <= SAFELEN) and (length(den) <= SAFELEN)) or
+         ((length(remt) = SAFELEN+1) and (remt <= FULLMAX ) and (length(den) <= SAFELEN)) or
+         ((length(den) = SAFELEN+1) and (den <= FULLMAX ) and (length(remt) <= SAFELEN)) then
       begin
         val(remt,remti,i);
         val(den,deni,i);
