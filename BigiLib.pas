@@ -577,13 +577,13 @@ end;
 
 { Square root }
 function isqrt(num: BigInt): BigInt;
-var x, y:  BigInt;
+var x, y, z : BigInt;
 var i, j: Integer;
 begin
   if (num[1]='-') then
     x := 'NaN'
   else
-  if (length(num) <= SAFELEN+1) and (num <= FULLMAX) then
+  if le(num,FULLMAX) then
   begin
     val(num,i,j);
     j := trunc(sqrt(i));
@@ -591,14 +591,41 @@ begin
   end
   else
   begin
-    x := num;
-    y := '1';
-    while gt(x,y) do
+    i := length(num);
+    if odd(i) then
+      if i=5 then
+        z := '180'
+      else
+      begin
+        z := '999';
+        j := i div 2 - 3;
+        while j > 0 do
+        begin
+          insert('9',z,1);
+          j := j - 1
+        end
+      end
+    else
     begin
-      x := add(x,y);
-      x := divide(x,'2');
-      y := divide(num,x)
-    end { while }
+      z := '316';
+      j := i div 2 - 3;
+      while j > 0 do
+      begin
+        z := z + '0';
+        j := j - 1
+      end
+    end;
+    x := divide(num,z);
+    y := divide(num,x);
+    y := add(x,y);
+    y := divide(y,'2');
+    while lt(y,x) do
+    begin
+      x := y;
+      y := divide(num,x);
+      y := add(x,y);
+      y := divide(y,'2')
+    end
   end;
   isqrt := x
 end;
