@@ -459,7 +459,7 @@ begin
   begin
     val(num1,x,i);
     val(num2,y,i);
-    i := x+y;
+    i := x*y;
     str(i,out);
     multiply := out
   end
