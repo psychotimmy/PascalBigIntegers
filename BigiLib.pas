@@ -347,7 +347,7 @@ begin
         i :=  i + 1;
       out := copy(out,i,length(out)+1-i)
     end;
-    if (neg) and (out<>0) then
+    if (neg) and (out<>'0') then
       insert('-',out,1)
   end;
   sub := out
