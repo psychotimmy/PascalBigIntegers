@@ -397,7 +397,7 @@ begin
       delete(num1,1,1);
       delete(num2,1,1);
       len1 := len1-1;
-      len2 := len2-2;
+      len2 := len2-1;
       if (len1 = 0) or (len2 = 0) then
         out := 'NaN'
       else
