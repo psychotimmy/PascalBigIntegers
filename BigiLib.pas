@@ -291,10 +291,11 @@ begin
       { Reverse operands if both are negative }
       if (num1[1]='-') and (num2[1]='-') then
       begin
-        temp1 := num1;
+        temp1 := num2;
         num2 := num1;
         num1 := temp1;
-        delete(num1,1,1)
+        delete(num1,1,1);
+        delete(num2,1,1)
       end;
       { Subtraction using complements }
       if gt(num1,num2) then
