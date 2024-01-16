@@ -71,6 +71,9 @@ For example, **fpc -Mtp BigPrime.pas**
 
 **BigPrime.pas** - a sieve of Eratosthenes prime number generator
 
+The advent of code 2023 solutions in https://github.com/psychotimmy/aoc2023-cpm use this library and
+provide useful tests of functionality
+
 ## Bugs and Improvements
 
 The library does no checking on the validity of BigInts used as function arguments. An
