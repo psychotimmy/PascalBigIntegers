@@ -262,85 +262,90 @@ var i, t1i, t2i: Integer;
     out, temp1, temp2, temp3: BigInt;
     neg: Boolean;
 begin
-  if (length(num1) <= SAFELEN) and (length(num2) <=SAFELEN) then { Safe for integer subtraction }
+  if (length(num1) <= SAFELEN) and (length(num2) <=SAFELEN) then
+  { Safe for integer subtraction }
   begin
     val(num1,t1i,i);
     val(num2,t2i,i);
     i := t1i-t2i;
-    str(i,out)
+    str(t1i-t2i,out);
+    sub := out;
+    exit
+  end;
+
+  out :='';
+  neg := FALSE;  { Used if both operands have the same sign }
+  { If one operand is negative, this is addition }
+  if (num1[1]<>'-') and (num2[1]='-') then
+  begin
+    delete(num2,1,1);
+    out := add(num1,num2)
   end
   else
+  if (num1[1]='-') and (num2[1]<>'-') then
   begin
-    { If one operand is negative, this is addition }
-    if (num1[1]<>'-') and (num2[1]='-') then
+    delete(num1,1,1);
+    out := add(num1,num2);
+    insert('-',out,1)
+  end;
+
+  { If out is still empty, then operands are of the same sign }
+  if out = '' then
+  begin
+    { Reverse operands and negate if both are negative }
+    if (num1[1]='-') and (num2[1]='-') then
     begin
-      delete(num2,1,1);
-      out := add(num1,num2)
-    end
-    else
-    if (num1[1]='-') and (num2[1]<>'-') then
-    begin
+      { Swap the operands over and make them both positive }
+      temp1 := num2;
+      num2 := num1;
+      num1 := temp1;
       delete(num1,1,1);
-      out := add(num1,num2);
-      insert('-',out,1)
+      delete(num2,1,1)
+    end;
+
+    { Subtraction using complements - current num1 > num2 }
+    if gt(num1,num2) then
+    begin
+      temp1 := '';
+      for i := 1 to length(num1) do
+        insert(chr(ORD0PLUSORD9-ord(num1[i])),temp1,i);
+      num1 := temp1;
+      temp1 := add(num1,num2);
+      if length(temp1) < length(num1) then
+        for i := 1 to length(num1)-length(temp1) do
+          insert('0',temp1,1);
+      for i := 1 to length(temp1) do
+        insert(chr(ORD0PLUSORD9-ord(temp1[i])),out,i)
     end
     else
+    if gt(num2,num1) then
     begin
-      out := '';
-      neg := FALSE;
-      { Reverse operands if both are negative }
-      if (num1[1]='-') and (num2[1]='-') then
-      begin
-        temp1 := num2;
-        num2 := num1;
-        num1 := temp1;
-        delete(num1,1,1);
-        delete(num2,1,1)
-      end;
-      { Subtraction using complements }
-      if gt(num1,num2) then
-      begin
-        temp1 := '';
-        for i := 1 to length(num1) do
-          insert(chr(ORD0PLUSORD9-ord(num1[i])),temp1,i);
-        num1 := temp1;
-        temp1 := add(num1,num2);
-        if length(temp1) < length(num1) then
-          for i := 1 to length(num1)-length(temp1) do
-            insert('0',temp1,1);
-        for i := 1 to length(temp1) do
-          insert(chr(ORD0PLUSORD9-ord(temp1[i])),out,i)
-      end
+      neg := TRUE;
+      temp1 := '';
+      temp2 := '';
+      temp3 := '';
+      for i := 1 to length(num2) do
+        insert(chr(ORD0PLUSORD9-ord(num2[i])),temp2,i);
+      temp2 := add(num1,temp2);
+      temp2 := add('1',temp2);
+      for i := 1 to length(temp2) do
+        insert('0',temp1,1);
+      insert('1',temp1,1);
+      for i := 1 to length(temp1) do
+        insert(chr(ORD0PLUSORD9-ord(temp1[i])),temp3,i);
+      out := add(temp3,temp2);
+      if length(out) < length(temp3) then
+        for i := 1 to length(temp3)-length(out) do
+          insert('0',out,1);
+      temp1 := '';
+      for i := 1 to length(out) do
+        insert(chr(ORD0PLUSORD9-ord(out[i])),temp1,i);
+      out := temp1
+    end
       else
-      if gt(num2,num1) then
-      begin
-        neg := TRUE;
-        temp1 := '';
-        temp2 := '';
-        temp3 := '';
-        for i := 1 to length(num2) do
-          insert(chr(ORD0PLUSORD9-ord(num2[i])),temp2,i);
-        num2 := temp2;
-        temp2 := add(num1,num2);
-        temp2 := add('1',temp2);
-        for i := 1 to length(num2) do
-          insert('0',temp1,1);
-        insert('1',temp1,1);
-        for i := 1 to length(temp1) do
-          insert(chr(ORD0PLUSORD9-ord(temp1[i])),temp3,i);
-        out := add(temp3,temp2);
-        if length(out) < length(temp3) then
-          for i := 1 to length(temp3)-length(out) do
-            insert('0',out,1);
-        temp1 := '';
-        for i := 1 to length(out) do
-          insert(chr(ORD0PLUSORD9-ord(out[i])),temp1,i);
-        out := temp1
-      end
-      else
-        out := '0'
-    end;
-    { Zap leading zeros and deal with any negative sign requirement }
+        out := '0';
+
+    { Zap leading zeros and deal with a negative result }
     if (length(out) > 1) and (out[1]='0') then
     begin
       i := 1;
@@ -348,7 +353,7 @@ begin
         i :=  i + 1;
       out := copy(out,i,length(out)+1-i)
     end;
-    if (neg) and (out<>'0') then
+    if (neg) then { Correct result if both operands have same sign }
       insert('-',out,1)
   end;
   sub := out
