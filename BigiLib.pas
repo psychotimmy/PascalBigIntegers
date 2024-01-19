@@ -9,14 +9,15 @@
 
 { Global declarations }
 
-const MAXLEN = 50;              { Maximum length of a BigInt, including sign }
-type BigInt = string[MAXLEN];
+const MAXLEN = 25;              { Maximum length of a BigInt, including sign }
 const ORD0 = 48;                { ord('0') }
 const ORD0PLUSORD9 = 105;       { ord('0') + ord('9') }
 const FULLMAX = '32767';        { MAXINT as a BigInt }
 const NEARMAX = '32766';        { MAXINT-1 as a BigInt }
 const HALFMAX = '16383';        { Half of MAXINT-1 as a BigInt }
 const SAFELEN = 4;              { length(MAXINT) - 1 }
+
+type BigInt = string[MAXLEN];
 
 { Forward references - note TP requires the actual function NOT to }
 { have the parameters declared - different to native FreePascal.   }
@@ -30,8 +31,8 @@ function lt(num1: BigInt; num2: BigInt): Boolean; Forward;
 
 { Karatsuba multiplication - recursive function }
 function karatsuba(x: BigInt; y: BigInt): BigInt;
-var i, hx, hy, pos: Integer;
-    part1, part2, part3, xl, xr, yl, yr, t1, t2, t3: BigInt;
+var i, hx, hy, posx: Integer;
+    part1, part2, part3, xl, xr, yl, yr, t1, t2: BigInt;
 begin
   hx := length(x);
   hy := length(y);
@@ -58,8 +59,7 @@ begin
   begin                     { Standard karatsuba assumes only }
     val(x,hx,i);            { single digits are safe }
     val(y,hy,i);
-    i := hx*hy;
-    str(i,part1);
+    str(hx*hy,part1);
     karatsuba := part1
   end
   else
@@ -77,8 +77,8 @@ begin
       insert('0',y,1)
     end;
 
-    pos := length(x);
-    hx := pos div 2;
+    posx := length(x);
+    hx := posx div 2;
     hy := length(y) div 2;
     xl := copy(x,1,hx);
     xr := copy(x,1+hx,255);
@@ -95,15 +95,13 @@ begin
     t1 := sub(part2,part1);
     t2 := sub(t1,part3);
 
-    for i := 1 to (pos div 2) do
+    for i := 1 to (posx div 2) do
       t2 := t2 + '0';
     t1 := part1;
-    for i := 1 to pos do
+    for i := 1 to posx do
       t1 := t1 + '0';
 
-    t3 := add(t1,t2);
-
-    karatsuba := add(t3,part3)
+    karatsuba := add(add(t1,t2),part3)
   end
 end;
 
@@ -124,8 +122,7 @@ begin
     if lt(den,HALFMAX) then      { Can safely use Integer arithmetic }
     begin
       val(den,deni,i);
-      i := deni*2;
-      str(i,dent)
+      str(deni*2,dent)
     end
     else
       dent := karatsuba(den,'2');
@@ -137,8 +134,7 @@ begin
       if lt(quott,HALFMAX) then
       begin
         val(quott,quoti,i);
-        i := quoti*2;
-        str(i,quot)
+        str(quoti*2,quot)
       end
       else
         quot := karatsuba(quott,'2');
@@ -149,8 +145,7 @@ begin
       if lt(quott,HALFMAX) then
       begin
         val(quott,quoti,i);
-        i := quoti*2;
-        str(i,quot)
+        str(quoti*2,quot)
       end
       else
         quot := karatsuba(quott,'2');
@@ -158,8 +153,7 @@ begin
       if lt(quot,NEARMAX) then
       begin
         val(quot,quoti,i);
-        i := quoti+1;
-        str(i,quot)
+        str(quoti+1,quot)
       end
       else
         quot := add(quot, '1');
@@ -170,8 +164,7 @@ begin
       begin
         val(remt,remti,i);
         val(den,deni,i);
-        i := remti-deni;
-        str(i,dent);
+        str(remti-deni,dent);
         rem := dent
       end
       else
@@ -267,7 +260,6 @@ begin
   begin
     val(num1,t1i,i);
     val(num2,t2i,i);
-    i := t1i-t2i;
     str(t1i-t2i,out);
     sub := out;
     exit
@@ -378,8 +370,7 @@ begin
   begin
     val(num1,i,ci);
     val(num2,j,ci);
-    ci := i+j;
-    str(ci,out)
+    str(i+j,out)
   end
   else
   begin
@@ -390,20 +381,19 @@ begin
     begin
       delete(num1,1,1);
       out := sub(num2,num1)
-    end
-    else
-    if (num1[1]<>'-') and (num2[1]='-') then
+    end;
+    if (num1[1]<>'-') and (num2[1]='-') and (out='') then
     begin
       delete(num2,1,1);
       out := sub(num1,num2)
     end;
     { Both numbers negative - so add and invert sign }
-    if (num1[1]='-') and (num2[1]='-') then
+    if (num1[1]='-') and (num2[1]='-') and (out = '') then
     begin
       delete(num1,1,1);
       delete(num2,1,1);
-      len1 := len1-1;
-      len2 := len2-1;
+      len1 := length(num1);
+      len2 := length(num2);
       if (len1 = 0) or (len2 = 0) then
         out := 'NaN'
       else
@@ -465,8 +455,7 @@ begin
   begin
     val(num1,x,i);
     val(num2,y,i);
-    i := x*y;
-    str(i,out);
+    str(x*y,out);
     multiply := out
   end
   else
@@ -519,8 +508,7 @@ begin
     begin
       val(num,n,i);
       val(den,d,i);
-      i := n div d;
-      str(i,quotient)
+      str(n div d,quotient)
     end
     else
     begin
@@ -561,8 +549,7 @@ begin
     begin
       val(num,n,i);
       val(den,d,i);
-      i := n mod d;
-      str(i,remainder)
+      str(n mod d,remainder)
     end
     else
     begin
@@ -592,8 +579,7 @@ begin
   if le(num,FULLMAX) then
   begin
     val(num,i,j);
-    j := trunc(sqrt(i));
-    str(j,x)
+    str(trunc(sqrt(i)),x)
   end
   else
   begin
@@ -622,15 +608,11 @@ begin
       end
     end;
     x := divide(num,z);
-    y := divide(num,x);
-    y := add(x,y);
-    y := divide(y,'2');
+    y := divide(add(x,divide(num,x)),'2');
     while lt(y,x) do
     begin
       x := y;
-      y := divide(num,x);
-      y := add(x,y);
-      y := divide(y,'2')
+      y := divide(add(x,divide(num,x)),'2')
     end
   end;
   isqrt := x
